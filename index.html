@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenue sur ma Galerie de Cartes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f5f0 0%, #fafaf7 100%);
+        }
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0);
+            z-index: 1000;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal img {
+            max-width: 90%;
+            max-height: 90vh;
+            object-fit: contain;
+            transform: scale(0.5);
+            opacity: 0;
+        }
+        .card {
+            background-color: rgba(255, 255, 255, 0.8);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        @media (min-width: 768px) {
+            .card {
+                opacity: 1;
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+    <!-- Modal pour l'image en plein écran -->
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <img id="modalImage" src="" alt="Image en plein écran" class="rounded-3xl">
+    </div>
+
+    <div class="w-full max-w-7xl mx-auto">
+        <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Galerie de Cartes</h1>
+        
+        <!-- Grille de cartes -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Carte 1 -->
+            <div class="card rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 p-3">
+                <img src="image/1.png" alt="Image 1" class="w-full h-64 object-contain rounded-3xl cursor-pointer" onclick="openModal(this.src)">
+            </div>
+
+            <!-- Carte 2 -->
+            <div class="card rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 p-3">
+                <img src="image/2.png" alt="Image 2" class="w-full h-64 object-contain rounded-3xl cursor-pointer" onclick="openModal(this.src)">
+            </div>
+
+            <!-- Carte 3 -->
+            <div class="card rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 p-3">
+                <img src="image/3.png" alt="Image 3" class="w-full h-64 object-contain rounded-3xl cursor-pointer" onclick="openModal(this.src)">
+            </div>
+
+            <!-- Carte 4 -->
+            <div class="card rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 p-3">
+                <img src="image/4.png" alt="Image 4" class="w-full h-64 object-contain rounded-3xl cursor-pointer" onclick="openModal(this.src)">
+            </div>
+
+            <!-- Carte 5 -->
+            <div class="card rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 p-3">
+                <img src="image/5.png" alt="Image 5" class="w-full h-64 object-contain rounded-3xl cursor-pointer" onclick="openModal(this.src)">
+            </div>
+
+            <!-- Carte 6 -->
+            <div class="card rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 p-3">
+                <img src="image/6.png" alt="Image 6" class="w-full h-64 object-contain rounded-3xl cursor-pointer" onclick="openModal(this.src)">
+            </div>
+
+            <!-- Carte 7 -->
+            <div class="card rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 p-3">
+                <img src="image/7.png" alt="Image 7" class="w-full h-64 object-contain rounded-3xl cursor-pointer" onclick="openModal(this.src)">
+            </div>
+
+            <!-- Carte 8 -->
+            <div class="card rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 p-3">
+                <img src="image/8.png" alt="Image 8" class="w-full h-64 object-contain rounded-3xl cursor-pointer" onclick="openModal(this.src)">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enregistrer le plugin ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Animation des cartes sur mobile
+        function initCardAnimations() {
+            if (window.innerWidth < 768) { // Seulement sur mobile
+                gsap.utils.toArray('.card').forEach((card, i) => {
+                    gsap.to(card, {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.8,
+                        ease: 'back.out(1.2)',
+                        scrollTrigger: {
+                            trigger: card,
+                            start: 'top bottom-=100',
+                            end: 'top center',
+                            toggleActions: 'play none none reverse'
+                        },
+                        delay: i * 0.1 // Délai progressif pour chaque carte
+                    });
+                });
+            }
+        }
+
+        // Initialiser les animations
+        initCardAnimations();
+
+        // Réinitialiser les animations lors du redimensionnement
+        window.addEventListener('resize', initCardAnimations);
+
+        function openModal(imgSrc) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modalImg.src = imgSrc;
+            
+            modal.style.visibility = 'visible';
+            
+            gsap.to(modal, {
+                duration: 0.4,
+                backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                opacity: 1,
+                ease: 'power2.out'
+            });
+
+            gsap.fromTo(modalImg, 
+                {
+                    scale: 0.5,
+                    opacity: 0,
+                    rotation: -5
+                },
+                {
+                    duration: 0.5,
+                    scale: 1,
+                    opacity: 1,
+                    rotation: 0,
+                    ease: 'back.out(1.7)'
+                }
+            );
+
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+
+            gsap.to(modal, {
+                duration: 0.3,
+                backgroundColor: 'rgba(0, 0, 0, 0)',
+                opacity: 0,
+                ease: 'power2.in'
+            });
+
+            gsap.to(modalImg, {
+                duration: 0.3,
+                scale: 0.5,
+                opacity: 0,
+                rotation: -5,
+                ease: 'back.in(1.7)',
+                onComplete: () => {
+                    modal.style.visibility = 'hidden';
+                }
+            });
+
+            document.body.style.overflow = 'auto';
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html> 
